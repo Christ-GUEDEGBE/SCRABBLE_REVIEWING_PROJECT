@@ -1,5 +1,5 @@
 import { RotateCcw, Check } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@mui/material';
 import { cn } from '@/lib/utils';
 import LetterTile from './LetterTile';
 
@@ -14,8 +14,7 @@ export default function BottomRow({ letters, isValid, onReset, onCheck }: Bottom
   return (
     <div className="flex items-center gap-4">
       <Button
-        variant="outline"
-        size="icon"
+        variant="outlined"
         onClick={onReset}
       >
         <RotateCcw className="h-4 w-4" />
@@ -32,9 +31,9 @@ export default function BottomRow({ letters, isValid, onReset, onCheck }: Bottom
       </div>
 
       <Button
-        variant="outline"
-        size="icon"
+        variant="contained"
         onClick={onCheck}
+        color="primary"
         className={cn(
           isValid === true && "bg-green-500 text-white",
           isValid === false && "bg-red-500 text-white"

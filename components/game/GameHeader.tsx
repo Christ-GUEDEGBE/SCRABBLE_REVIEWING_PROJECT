@@ -1,5 +1,5 @@
 import { Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@mui/material';
 import { GameSettings } from '@/lib/game-logic';
 
 interface GameHeaderProps {
@@ -13,12 +13,12 @@ export default function GameHeader({ settings, onSettingsClick }: GameHeaderProp
       <h1 className="text-2xl font-bold">
         SELECTION: **{settings.requiredLetter}, {settings.letterCount} LETTERS**
       </h1>
-      <Button
-        variant="outline"
-        size="icon"
+      <Button 
+        variant="contained" 
         onClick={onSettingsClick}
+        sx={{ marginLeft: 'auto' }}
       >
-        <Settings className="h-4 w-4" />
+        Settings
       </Button>
     </div>
   );
