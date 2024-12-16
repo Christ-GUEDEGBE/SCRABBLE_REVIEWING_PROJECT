@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@mui/material';
 import GameHeader from './GameHeader';
 import LetterGrid from './LetterGrid';
 import GameProgress from './GameProgress';

@@ -1,15 +1,14 @@
 "use client";
 
+import React from 'react';
 import {
   Dialog,
-  DialogContent,
-  DialogHeader,
   DialogTitle,
-  DialogFooter,
-} from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+  DialogContent,
+  DialogActions,
+  TextField,
+  Button
+} from '@mui/material';
 import { GameSettings } from '@/lib/game-logic';
 
 interface SettingsDialogProps {
@@ -31,37 +30,30 @@ export default function SettingsDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onClose={() => onOpenChange(false)}>
+      <DialogTitle>Game Settings</DialogTitle>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Game Settings</DialogTitle>
-        </DialogHeader>
         <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <Label htmlFor="letterCount">Number of Letters</Label>
-            <Input
-              id="letterCount"
-              type="number"
-              min={3}
-              max={7}
-              value={settings.letterCount}
-              onChange={(e) => onSave({ ...settings, letterCount: parseInt(e.target.value) })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="requiredLetter">Required Letter</Label>
-            <Input
-              id="requiredLetter"
-              maxLength={1}
-              value={settings.requiredLetter}
-              onChange={(e) => onSave({ ...settings, requiredLetter: e.target.value.toUpperCase() })}
-            />
-          </div>
+          <TextField
+            fullWidth
+            label="Number of Letters"
+            type="number"
+            InputProps={{ inputProps: { min: 3, max: 7 } }}
+            value={settings.letterCount}
+            onChange={(e) => onSave({ ...settings, letterCount: parseInt(e.target.value) })}
+          />
+          <TextField
+            fullWidth
+            label="Required Letter"
+            inputProps={{ maxLength: 1 }}
+            value={settings.requiredLetter}
+            onChange={(e) => onSave({ ...settings, requiredLetter: e.target.value.toUpperCase() })}
+          />
         </div>
-        <DialogFooter>
-          <Button onClick={handleSave}>Save Changes</Button>
-        </DialogFooter>
       </DialogContent>
+      <DialogActions>
+        <Button onClick={handleSave} variant="contained">Save Changes</Button>
+      </DialogActions>
     </Dialog>
   );
 }
