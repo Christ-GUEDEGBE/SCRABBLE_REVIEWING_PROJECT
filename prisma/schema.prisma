@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Letter {
+  id           Int            @id @default(autoincrement())
+  letter       String         @db.Char(1)
+  position     Int
+  wordPositions WordPosition[]
+
+  @@unique([letter, position])
+  @@index([letter, position])
+}
+
+model Word {
+  id        Int            @id @default(autoincrement())
+  word      String         @unique @db.VarChar(7)
+  length    Int
+  positions WordPosition[]
+  natures   WordNature[]
+
+  @@index([length])
+}
+
+model Nature {
+  id          Int          @id @default(autoincrement())
+  nature      String       @unique @db.VarChar(20)
+  description String?
+  words       WordNature[]
+}
+
+model WordPosition {
+  word      Word    @relation(fields: [wordId], references: [id])
+  wordId    Int
+  letter    Letter  @relation(fields: [letterId], references: [id])
+  letterId  Int
+  position  Int
+
+  @@id([wordId, letterId, position])
+  @@index([position])
+}
+
+model WordNature {
+  word     Word    @relation(fields: [wordId], references: [id])
+  wordId   Int
+  nature   Nature  @relation(fields: [natureId], references: [id])
+  natureId Int
+
+  @@id([wordId, natureId])
+}

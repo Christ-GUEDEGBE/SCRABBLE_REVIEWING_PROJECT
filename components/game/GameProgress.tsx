@@ -1,5 +1,7 @@
+import type { Word } from '@/types/word';
+
 interface GameProgressProps {
-  foundWords: string[];
+  foundWords: Word[];
   totalWords: number;
 }
 
@@ -10,12 +12,12 @@ export default function GameProgress({ foundWords, totalWords }: GameProgressPro
         Progress: {foundWords.length}/{totalWords}
       </div>
       <div className="space-x-2">
-        {foundWords.map((word, index) => (
+        {foundWords.map((wordObj, index) => (
           <span
             key={index}
             className="inline-block bg-green-100 text-green-800 px-2 py-1 rounded"
           >
-            {word}
+            {wordObj.word}
           </span>
         ))}
       </div>
