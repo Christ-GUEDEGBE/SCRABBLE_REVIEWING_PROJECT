@@ -14,7 +14,7 @@ model Letter {
   wordPositions WordPosition[]
 
   @@unique([letter, position])
-  @@index([letter, position])
+  @@index([letter, position], name: "idx_lettres_composite")
 }
 
 model Word {
@@ -24,7 +24,7 @@ model Word {
   positions WordPosition[]
   natures   WordNature[]
 
-  @@index([length])
+  @@index([length], name: "idx_mots_longueur")
 }
 
 model Nature {
@@ -42,7 +42,7 @@ model WordPosition {
   position  Int
 
   @@id([wordId, letterId, position])
-  @@index([position])
+  @@index([position], name: "idx_positions_lettres_position")
 }
 
 model WordNature {
