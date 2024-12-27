@@ -1,13 +1,14 @@
-import { Settings } from 'lucide-react';
 import { Button } from '@mui/material';
+import { useRouter } from 'next/navigation';
 import { GameSettings } from '@/lib/game-logic';
 
 interface GameHeaderProps {
   settings: GameSettings;
-  onSettingsClick: () => void;
 }
 
-export default function GameHeader({ settings, onSettingsClick }: GameHeaderProps) {
+export default function GameHeader({ settings }: GameHeaderProps) {
+  const router = useRouter();
+
   return (
     <div className="flex justify-between items-center">
       <h1 className="text-2xl font-bold">
@@ -15,8 +16,7 @@ export default function GameHeader({ settings, onSettingsClick }: GameHeaderProp
       </h1>
       <Button 
         variant="contained" 
-        onClick={onSettingsClick}
-        sx={{ marginLeft: 'auto' }}
+        onClick={() => router.push('/settings')}
       >
         Settings
       </Button>
