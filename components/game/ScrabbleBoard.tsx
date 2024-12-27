@@ -8,7 +8,6 @@ import LetterGrid from './LetterGrid';
 import GameProgress from './GameProgress';
 import BottomRow from './BottomRow';
 import WordDetails from './WordDetails';
-import SettingsDialog from './SettingsDialog';
 import { generateLetterDraw, createEmptyBottomRow, GameSettings } from '@/lib/game-logic';
 import type { Word } from '@/types/word';
 
@@ -18,7 +17,6 @@ export default function ScrabbleBoard() {
   const [bottomLetters, setBottomLetters] = useState<string[]>([]);
   const [foundWords, setFoundWords] = useState<Word[]>([]);
   const [totalWords, setTotalWords] = useState(3);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isValid, setIsValid] = useState<boolean | null>(null);
   const [currentWordDetails, setCurrentWordDetails] = useState<Word | null>(null);
   const [settings, setSettings] = useState<GameSettings>({
@@ -27,6 +25,14 @@ export default function ScrabbleBoard() {
   });
 
   useEffect(() => {
+    const savedSettings = localStorage.getItem('gameSettings');
+    if (savedSettings) {
+      const parsed = JSON.parse(savedSettings);
+      setSettings(parsed);
+      calculatePossibleWords(parsed);
+    } else {
+      calculatePossibleWords(settings);
+    }
     generateNewDraw();
   }, []);
 
@@ -37,15 +43,10 @@ export default function ScrabbleBoard() {
     setIsValid(null);
   };
 
-  const handleSettingsSave = (newSettings: GameSettings) => {
-    setSettings(newSettings);
-    generateNewDraw();
-  };
-
-  const calculatePossibleWords = async () => {
+  const calculatePossibleWords = async (currentSettings: GameSettings) => {
     try {
       const response = await fetch(
-        `/api/words?requiredLetter=${settings.requiredLetter}&maxLength=${settings.letterCount}`
+        `/api/words?requiredLetter=${currentSettings.requiredLetter}&maxLength=${currentSettings.letterCount}`
       );
       const data = await response.json();
       
@@ -59,10 +60,6 @@ export default function ScrabbleBoard() {
       setTotalWords(0);
     }
   };
-
-  useEffect(() => {
-    calculatePossibleWords();
-  }, [settings.letterCount, settings.requiredLetter]);
 
   const handleWordCheck = async () => {
     const word = bottomLetters.join("");
@@ -122,10 +119,7 @@ export default function ScrabbleBoard() {
 
   return (
     <div className="space-y-8">
-      <GameHeader
-        settings={settings}
-        onSettingsClick={() => setIsSettingsOpen(true)}
-      />
+      <GameHeader settings={settings} />
 
       <div className="space-y-12">
         <LetterGrid
@@ -174,13 +168,6 @@ export default function ScrabbleBoard() {
           <WordDetails word={currentWordDetails} />
         )}
       </div>
-
-      <SettingsDialog
-        open={isSettingsOpen}
-        onOpenChange={setIsSettingsOpen}
-        settings={settings}
-        onSave={handleSettingsSave}
-      />
     </div>
   );
 }
